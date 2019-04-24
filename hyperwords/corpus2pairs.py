@@ -7,6 +7,10 @@ from docopt import docopt
 
 def main():
     args = docopt("""
+    Writes to stdout each observation of a token-context pair.
+    Sentences are padded to get fixed-size contexts (see param win below).
+    In each observation, token and context are tab-separated
+
     Usage:
         corpus2pairs.py [options] <corpus>
     
@@ -64,7 +68,7 @@ def main():
                         context = ', '.join([padded_toks[j + win] + '_' + str(j - i) for j in xrange(start, end) if j != i and padded_toks[j + win] is not None]).strip()
                     else:
                         context = ', '.join([padded_toks[j + win] for j in xrange(start, end) if j != i and padded_toks[j + win] is not None]).strip()
-                    output = tok + ' {' + context + '}\n'
+                    output = tok + '\t{' + context + '}'
                     if len(output) > 0:
                         print output
 
