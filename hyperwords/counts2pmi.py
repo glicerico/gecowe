@@ -46,7 +46,7 @@ def read_counts_matrix(counts_path):
     i = 0
     with open(counts_path) as f:
         for line in f:
-            count, word, context = line.strip().split()
+            count, word, context = line.strip().split('\t')
             if word in wi and context in ci:
                 tmp_counts[wi[word], ci[context]] = int(count)
             i += 1

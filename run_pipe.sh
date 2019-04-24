@@ -21,7 +21,7 @@ python $SOURCE_DIR/hyperwords/counts2vocab.py w2.sub/counts
 # python $SOURCE_DIR/hyperwords/counts2vocab.py w5.dyn.sub.del/counts
 
 # Calculate PMI matrices for each collection of pairs
-# python $SOURCE_DIR/hyperwords/counts2pmi.py --cds 0.75 w2.sub/counts w2.sub/pmi
+python $SOURCE_DIR/hyperwords/counts2pmi.py --cds 0.75 w2.sub/counts w2.sub/pmi
 # python $SOURCE_DIR/hyperwords/counts2pmi.py --cds 0.75 w5.dyn.sub.del/counts w5.dyn.sub.del/pmi
 
 
