@@ -26,9 +26,9 @@ python $SOURCE_DIR/hyperwords/counts2pmi.py --cds 0.75 w2.sub/counts w2.sub/pmi
 
 
 # Create embeddings with SVD
-# python $SOURCE_DIR/hyperwords/pmi2svd.py --dim 500 --neg 5 w2.sub/pmi w2.sub/svd
-# cp w2.sub/pmi.words.vocab w2.sub/svd.words.vocab
-# cp w2.sub/pmi.contexts.vocab w2.sub/svd.contexts.vocab
+python $SOURCE_DIR/hyperwords/pmi2svd.py --dim 500 --neg 5 w2.sub/pmi w2.sub/svd
+cp w2.sub/pmi.words.vocab w2.sub/svd.words.vocab
+cp w2.sub/pmi.contexts.vocab w2.sub/svd.contexts.vocab
 # python $SOURCE_DIR/hyperwords/pmi2svd.py --dim 500 --neg 5 w5.dyn.sub.del/pmi w5.dyn.sub.del/svd
 # cp w5.dyn.sub.del/pmi.words.vocab w5.dyn.sub.del/svd.words.vocab
 # cp w5.dyn.sub.del/pmi.contexts.vocab w5.dyn.sub.del/svd.contexts.vocab
