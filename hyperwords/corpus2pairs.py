@@ -34,6 +34,7 @@ def main():
     subsample *= corpus_size
     subsampler = dict([(word, 1 - sqrt(subsample / count)) for word, count in vocab.items() if count > subsample])
     
+    filler = "#WALL#"
     rnd = Random(17)
     with open(corpus_file) as f: 
         for line in f:
@@ -46,6 +47,10 @@ def main():
             
             len_tokens = len(tokens)
             
+            padded_toks = [filler] * win
+            temp_toks = tokens[:]
+            temp_toks.extend(padded_toks)
+            padded_toks.extend(temp_toks)
             for i, tok in enumerate(tokens):
                 if tok is not None:
                     if dyn:
@@ -53,16 +58,13 @@ def main():
                     else:
                         dynamic_window = win
                     start = i - dynamic_window
-                    if start < 0:
-                        start = 0
                     end = i + dynamic_window + 1
-                    if end > len_tokens:
-                        end = len_tokens
                     
                     if pos:
-                        output = '\n'.join([row for row in [tok + ' ' + tokens[j] + '_' + str(j - i) for j in xrange(start, end) if j != i and tokens[j] is not None] if len(row) > 0]).strip()
+                        context = ', '.join([padded_toks[j + win] + '_' + str(j - i) for j in xrange(start, end) if j != i and padded_toks[j + win] is not None]).strip()
                     else:
-                        output = '\n'.join([row for row in [tok + ' ' + tokens[j] for j in xrange(start, end) if j != i and tokens[j] is not None] if len(row) > 0]).strip()
+                        context = ', '.join([padded_toks[j + win] for j in xrange(start, end) if j != i and padded_toks[j + win] is not None]).strip()
+                    output = tok + ' {' + context + '}\n'
                     if len(output) > 0:
                         print output
 
