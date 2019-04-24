@@ -28,11 +28,11 @@ def load_vocabulary(path):
 def save_count_vocabulary(path, vocab):
     with open(path, 'w') as f:
         for w, c in vocab:
-            print >>f, w, c
+            print >>f, w + '\t' + str(c)
 
 
 def load_count_vocabulary(path):
     with open(path) as f:
         # noinspection PyTypeChecker
-        vocab = dict([line.strip().split() for line in f if len(line) > 0])
+        vocab = dict([line.strip().split('\t') for line in f if len(line) > 0])
     return vocab
