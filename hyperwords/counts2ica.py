@@ -1,63 +1,41 @@
 from docopt import docopt
 from scipy.sparse import dok_matrix, csr_matrix
+from sklearn.decomposition import FastICA
 import numpy as np
 
+from counts2pmi import read_counts_matrix
 from representations.matrix_serializer import save_matrix, save_vocabulary, load_count_vocabulary
 
 
 def main():
     args = docopt("""
     Usage:
-        counts2pmi.py [options] <counts> <output_path>
+        counts2ica.py [options] <counts> <output_path>
     
     Options:
-        --cds NUM    Context distribution smoothing [default: 1.0]
+        --cps NUM    Number of ICA components to obtain [default: 50]
     """)
     
     counts_path = args['<counts>']
     vectors_path = args['<output_path>']
-    cds = float(args['--cds'])
     
     counts, iw, ic = read_counts_matrix(counts_path)
 
-    pmi = calc_pmi(counts, cds)
+    embeddings = calc_ica(counts, args['--cps'])
 
-    save_matrix(vectors_path, pmi)
+    save_matrix(vectors_path, embeddings)
     save_vocabulary(vectors_path + '.words.vocab', iw)
     save_vocabulary(vectors_path + '.contexts.vocab', ic)
 
-
-def read_counts_matrix(counts_path):
+def calc_ica(counts, cps):
     """
-    Reads the counts into a sparse matrix (CSR) from the count-word-context textual format.
+    Performs Independent Component Analysis (ICA) on counts 
+    matrix, obtaining cps independent
+    components, and returns dimension-reduced embeddings.
     """
-    words = load_count_vocabulary(counts_path + '.words.vocab')
-    contexts = load_count_vocabulary(counts_path + '.contexts.vocab')
-    words = list(words.keys())
-    contexts = list(contexts.keys())
-    iw = sorted(words)
-    ic = sorted(contexts)
-    wi = dict([(w, i) for i, w in enumerate(iw)])
-    ci = dict([(c, i) for i, c in enumerate(ic)])
-    
-    counts = csr_matrix((len(wi), len(ci)), dtype=np.float32)
-    tmp_counts = dok_matrix((len(wi), len(ci)), dtype=np.float32)
-    update_threshold = 100000
-    i = 0
-    with open(counts_path) as f:
-        for line in f:
-            count, word, context = line.strip().split('\t')
-            if word in wi and context in ci:
-                tmp_counts[wi[word], ci[context]] = int(count)
-            i += 1
-            if i == update_threshold:
-                counts = counts + tmp_counts.tocsr()
-                tmp_counts = dok_matrix((len(wi), len(ci)), dtype=np.float32)
-                i = 0
-    counts = counts + tmp_counts.tocsr()
-    
-    return counts, iw, ic
-
+    ica = FastICA(n_components = cps)
+    embeddings = ica.fit_transform(counts.toarray())
+    return csr_matrix(embeddings)
 
 def calc_pmi(counts, cds):
     """

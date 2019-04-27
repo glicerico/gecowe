@@ -7,13 +7,14 @@ fi
 
 
 # Download corpus. We chose a small corpus for the example, and larger corpora will yield better results.
-wget http://www.statmt.org/wmt14/training-monolingual-news-crawl/news.2010.en.shuffled.gz
-gzip -d news.2010.en.shuffled.gz
 CORPUS=news.2010.en.shuffled
+if [ ! -f news.2010.en.shuffled.gz]; then
+	wget http://www.statmt.org/wmt14/training-monolingual-news-crawl/news.2010.en.shuffled.gz
+	gzip -d news.2010.en.shuffled.gz
 
-# Clean the corpus from non alpha-numeric symbols
-scripts/clean_corpus.sh $CORPUS > $CORPUS.clean
-
+	# Clean the corpus from non alpha-numeric symbols
+	scripts/clean_corpus.sh $CORPUS > $CORPUS.clean
+fi
 
 # Create two example collections of word-context pairs:
 
