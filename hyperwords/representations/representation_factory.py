@@ -14,6 +14,8 @@ def create_representation(args):
             raise Exception('w+c is not implemented for PPMI.')
         else:
             return PositiveExplicit(path, True, neg)
+    if rep_type == 'ICA':
+        return PositiveExplicit(path, False, 1)
         
     elif rep_type == 'SVD':
         if w_c:

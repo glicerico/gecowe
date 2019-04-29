@@ -1,6 +1,6 @@
 from docopt import docopt
 from scipy.sparse import dok_matrix, csr_matrix
-from sklearn.decomposition import FastICA
+from sklearn.decomposition import FastICA, TruncatedSVD
 import numpy as np
 
 from counts2pmi import read_counts_matrix
@@ -21,9 +21,9 @@ def main():
     
     counts, iw, ic = read_counts_matrix(counts_path)
 
-    embeddings = calc_ica(counts, args['--cps'])
+    embeddings = calc_ica(counts, int(args['--cps']))
 
-    save_matrix(vectors_path, embeddings)
+    save_matrix(vectors_path, csr_matrix(embeddings))
     save_vocabulary(vectors_path + '.words.vocab', iw)
     save_vocabulary(vectors_path + '.contexts.vocab', ic)
 
@@ -33,9 +33,9 @@ def calc_ica(counts, cps):
     matrix, obtaining cps independent
     components, and returns dimension-reduced embeddings.
     """
-    ica = FastICA(n_components = cps)
-    embeddings = ica.fit_transform(counts.toarray())
-    return csr_matrix(embeddings)
+    ica = TruncatedSVD(n_components = cps)
+    embeddings = ica.fit_transform(counts, )
+    return embeddings
 
 def calc_pmi(counts, cds):
     """

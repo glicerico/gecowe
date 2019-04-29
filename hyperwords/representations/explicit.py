@@ -15,7 +15,7 @@ class Explicit:
         self.wi, self.iw = load_vocabulary(path + '.words.vocab')
         self.ci, self.ic = load_vocabulary(path + '.contexts.vocab')
         self.m = load_matrix(path)
-        self.m.data = np.log(self.m.data)
+        #self.m.data = np.log(self.m.data)
         self.normal = normalize
         if normalize:
             self.normalize()
@@ -32,7 +32,7 @@ class Explicit:
         if w in self.wi:
             return self.m[self.wi[w], :]
         else:
-            return csr_matrix((1, len(self.ic)))
+            return csr_matrix((1, self.m.shape[1]))
     
     def similarity_first_order(self, w, c):
         return self.m[self.wi[w], self.ci[c]]
@@ -66,7 +66,7 @@ class PositiveExplicit(Explicit):
     
     def __init__(self, path, normalize=True, neg=1):
         Explicit.__init__(self, path, False)
-        self.m.data -= np.log(neg)
+        #self.m.data -= np.log(neg)
         self.m.data[self.m.data < 0] = 0
         self.m.eliminate_zeros()
         if normalize:
