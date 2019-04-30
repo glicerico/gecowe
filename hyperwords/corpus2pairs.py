@@ -38,7 +38,7 @@ def main():
     subsample *= corpus_size
     subsampler = dict([(word, 1 - sqrt(subsample / count)) for word, count in vocab.items() if count > subsample])
     
-    filler = "#WALL#"
+    filler = "#WALL#" # special token marking beginning/end of each line
     rnd = Random(17)
     with open(corpus_file) as f: 
         for line in f:
@@ -51,6 +51,7 @@ def main():
             
             len_tokens = len(tokens)
             
+            # Pad lines with filler word
             padded_toks = [filler] * win
             temp_toks = tokens[:]
             temp_toks.extend(padded_toks)
@@ -74,6 +75,9 @@ def main():
 
 
 def read_vocab(corpus_file, thr):
+    """
+    Creates dictionary {token, count} for tokens appearing more than "thr" times
+    """
     vocab = Counter()
     with open(corpus_file) as f:
         for line in f:
