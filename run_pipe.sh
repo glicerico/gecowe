@@ -13,6 +13,7 @@ $SOURCE_DIR/scripts/clean_corpus.sh $CORPUS > $CORPUS.clean
 echo "Counting word-context pairs for win=2..."
 mkdir -p w2.sub
 python $SOURCE_DIR/hyperwords/corpus2pairs.py --thr 0 --win 2 ${CORPUS}.clean > w2.sub/pairs
+python $SOURCE_DIR/hyperwords/corpus2pairs.py --thr 0 --win 2 --pos ${CORPUS}.clean > w2.sub/pairs_pos
 $SOURCE_DIR/scripts/pairs2counts.sh w2.sub/pairs > w2.sub/counts
 python $SOURCE_DIR/hyperwords/counts2vocab.py w2.sub/counts
 
