@@ -21,7 +21,9 @@ def main():
     
     counts, iw, ic = read_counts_matrix(counts_path)
 
+    print "before calc_ica"
     embeddings = calc_ica(counts, int(args['--cps']))
+    print "after calc_ica"
 
     save_matrix(vectors_path, csr_matrix(embeddings))
     save_vocabulary(vectors_path + '.words.vocab', iw)
@@ -34,7 +36,7 @@ def calc_ica(counts, cps):
     components, and returns dimension-reduced embeddings.
     """
     ica = TruncatedSVD(n_components = cps)
-    embeddings = ica.fit_transform(counts, )
+    embeddings = ica.fit_transform(counts, cps)
     return embeddings
 
 def calc_pmi(counts, cds):
