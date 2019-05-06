@@ -38,6 +38,9 @@ cp w2.sub/pmi.contexts.vocab w2.sub/svd.contexts.vocab
 # cp w5.dyn.sub.del/pmi.words.vocab w5.dyn.sub.del/svd.words.vocab
 # cp w5.dyn.sub.del/pmi.contexts.vocab w5.dyn.sub.del/svd.contexts.vocab
 
+# Create second embeddings (first iterationd) from SVD
+echo "Iterating embedding using context with win=2..."
+python $SOURCE_DIR/hyperwords/rep2rep.py --win 2 SVD w2.sub/svd w2.sub/iter_1 w2.sub/pairs_pos
 
 # Evaluate on Word Similarity
 echo
