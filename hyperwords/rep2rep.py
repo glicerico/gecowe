@@ -25,14 +25,12 @@ def main():
         --eig NUM   Weighted exponent of the eigenvalue matrix (only applicable to SVD) [default: 0.5]
     """)
 
-    print "hjola"
     output_path = args['<output_path>']
     
     aug_matrix = augment_representation(args)
     t_svd = TruncatedSVD(n_components = args['--new_dim'])
     iterated_rep = t_svd.fit_transform(aug_matrix)
 
-    print "adios"
     np.save(output_path, iterated_rep)
 
 def augment_representation(args):
