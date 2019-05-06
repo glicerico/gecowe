@@ -1,7 +1,7 @@
 # gecowe
 Generic Contexts Word Embeddings: A count-based word embedding for generic contexts.
 
-Based on Levy, Goldberg and Dagan's code (Levy et al. 2015).
+Based on Levy, Goldberg and Dagan's code (Levy et al. 2015): https://bitbucket.org/omerlevy/hyperwords/src/
 
 Currently, this repository contains a direct copy of the aforementioned code. It will be subsequently modified for the
 aforementioned purposes.
