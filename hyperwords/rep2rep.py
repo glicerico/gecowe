@@ -7,10 +7,14 @@
 ### of size 2*win. the output embedding will have size
 ### rep_size2 = 2 * win * rep_size1
 
+from sparsesvd import sparsesvd
+
 import numpy as np
+from scipy.sparse import csr_matrix
+
 from docopt import docopt
+
 from representations.representation_factory import create_representation
-from sklearn.decomposition import TruncatedSVD
 
 def main():
     args = docopt("""
@@ -28,10 +32,13 @@ def main():
     output_path = args['<output_path>']
     
     aug_matrix = augment_representation(args)
-    t_svd = TruncatedSVD(n_components = args['--new_dim'])
-    iterated_rep = t_svd.fit_transform(aug_matrix)
+    ut, s, vt = sparsesvd(aug_matrix.tocsc(), int(args['--new_dim']))
 
-    np.save(output_path, iterated_rep)
+    np.save(output_path + '.ut.npy', ut)
+    np.save(output_path + '.s.npy', s)
+    np.save(output_path + '.vt.npy', vt)
+    save_vocabulary(output_path + '.words.vocab', explicit.iw)
+    save_vocabulary(output_path + '.contexts.vocab', explicit.ic)
 
 def augment_representation(args):
     """
@@ -66,7 +73,7 @@ def augment_representation(args):
             # Add vector of context word to appropriate range of extended representation
             ctx_matrix[representation.wi[word], range_start:range_end] += ctx_vec
 
-    return ctx_matrix
+    return csr_matrix(ctx_matrix)
             
 if __name__ == '__main__':
     main()
